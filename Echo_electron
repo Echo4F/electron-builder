@@ -1,0 +1,50 @@
+Uncaught Exception:
+Error: Cannot find module 'request'
+Require stack:
+
+    /Applications/xxxx.app/Contents/Resources/app.asar/dist/main/index.cjs
+
+at Module._resolveFilename (node:internal/modules/cjs/loader:940:15)
+at Function.n._resolveFilename (node:electron/js2c/browser_init:249:1128)
+at Module._load (node:internal/modules/cjs/loader:785:27)
+at Function.c._load (node:electron/js2c/asar_bundle:5:13331)
+at Module.require (node:internal/modules/cjs/loader:1012:19)
+at require (node:internal/modules/cjs/helpers:94:18)
+at Object. (/Applications/xxxx.app/Contents/Resources/app.asar/dist/main/index.cjs:15:10482)
+at Module._compile (node:internal/modules/cjs/loader:1116:14)
+at Object.Module._extensions..js (node:internal/modules/cjs/loader:1169:10)
+at Module.load (node:internal/`
+I use request(version:2.88.2) module in Main process. it can work in local.but,show me the error when i open the built app.
+
+the dependences:
+"dependencies": { "axios": "^0.24.0", "clipboard": "^2.0.8", "dayjs": "^1.10.7", "electron-store": "^8.0.1", "element-plus": "^1.2.0-beta.6", "pinia": "^2.0.9", "qs": "^6.10.2", "request": "^2.88.2", "sass": "^1.45.1", "spark-md5": "^3.0.2", "vue": "^3.2.22", "vue-i18n": "^9.1.9", "vue-router": "^4.0.11" }
+
+main build script:
+`import { join } from 'path'
+import { builtinModules } from 'module'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+mode: process.env.NODE_ENV,
+root: join(__dirname, '../src/main'),
+build: {
+outDir: '../../dist/main',
+lib: {
+entry: 'index.ts',
+formats: ['cjs'],
+},
+minify: process.env.NODE_ENV === 'production',
+emptyOutDir: true,
+rollupOptions: {
+external: [
+...builtinModules,
+'electron',
+],
+output: {
+entryFileNames: '[name].cjs',
+},
+},
+},
+})`
+nodejs version:v14.18.1
+vite version:2.7.9
